@@ -1,0 +1,173 @@
+<div class="page-sidebar" id="sidebar">
+    <!-- Page Sidebar Header-->
+    <div class="sidebar-header-wrapper">
+        <input class="searchinput" type="text">
+        <i class="searchicon fa fa-search"></i>
+        <div class="searchhelper">Search Reports, Charts, Emails or Notifications</div>
+    </div>
+    <!-- /Page Sidebar Header -->
+    <!-- Sidebar Menu -->
+    <ul class="nav sidebar-menu">
+        <!--Dashboard-->
+
+        <li {if condition="$controller eq 'Conf'"} class="open" {/if}>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-cog"></i>
+                <span class="menu-text">系统设置</span>
+                <i class="menu-expand"></i>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="{:url('Conf/conflist')}">
+                        <span class="menu-text">配置列表</span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{:url('Conf/lst')}">
+                        <span class="menu-text">配置管理</span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li {if condition="$controller eq 'Category'"} class="open" {/if}>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-folder"></i>
+
+                <span class="menu-text">栏目管理</span>
+
+                <i class="menu-expand"></i>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="{:url('Category/lst')}">
+                                    <span class="menu-text">栏目列表</span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{:url('Category/add')}">
+                        <span class="menu-text">添加栏目</span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="https://chuanke.baidu.com/s2260700.html" target="_blank">
+                <i class="menu-icon fa fa-film"></i>
+
+                <span class="menu-text">ThinkPHP5视频教程</span>
+
+                <i class="menu-expand"></i>
+            </a>
+        </li>
+        <li>
+            <a href="/admin/main/index.html">
+                <i class="menu-icon fa fa-gear"></i>
+
+                <span class="menu-text">控制面板</span>
+
+                <i class="menu-expand"></i>
+            </a>
+        </li>
+        <li  {if condition="$controller eq 'Content'"} class="open" {/if}>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-floppy-o"></i>
+
+                <span class="menu-text">文档管理</span>
+
+                <i class="menu-expand"></i>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="{:url('Content/lst')}">
+                        <span class="menu-text">文章列表</span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+        <li  {if condition="$controller eq 'Model'"} class="open" {/if}>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-maxcdn"></i>
+
+                <span class="menu-text">模型管理</span>
+
+                <i class="menu-expand"></i>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="{:url('Model/lst')}">
+                        <span class="menu-text">模型列表</span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{:url('Model/add')}">
+                        <span class="menu-text">添加模型</span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li  {if condition="$controller eq 'ModelField'"} class="open" {/if}>
+        <a href="#" class="menu-dropdown">
+            <i class="menu-icon fa fa-list-ul"></i>
+
+            <span class="menu-text">字段管理</span>
+
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="{:url('ModelField/lst')}">
+                    <span class="menu-text">字段列表</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href="{:url('ModelField/add')}">
+                    <span class="menu-text">添加字段</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+        </ul>
+        </li>
+        <li>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-gear"></i>
+
+                <span class="menu-text">系统</span>
+
+                <i class="menu-expand"></i>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="/admin/user/index.html">
+                        <span class="menu-text">用户管理</span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/auth_group/index.html">
+                        <span class="menu-text">角色管理</span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/auth_rule/index.html">
+                        <span class="menu-text">权限列表</span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+    </ul>
+    <!-- /Sidebar Menu -->
+</div>

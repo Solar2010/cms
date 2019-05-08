@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <title>童老师ThinkPHP交流群：484519446</title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__admin__/style/bootstrap.css" rel="stylesheet">
+    <link href="__admin__/style/font-awesome.css" rel="stylesheet">
+    <link href="__admin__/style/weather-icons.css" rel="stylesheet">
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__admin__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__admin__/style/demo.css" rel="stylesheet">
+    <link href="__admin__/style/typicons.css" rel="stylesheet">
+    <link href="__admin__/style/animate.css" rel="stylesheet">
+</head>
+<body>
+<!-- 头部 -->
+{include file="public/top"}
+<!-- /头部 -->
+
+<div class="main-container container-fluid">
+    <div class="page-container">
+        <!-- Page Sidebar -->
+        {include file="public/left"}
+        <!-- /Page Sidebar -->
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Breadcrumb -->
+            <div class="page-breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{:url('Index/lst')}">系统</a>
+                    </li>
+                    <li class="active">字段管理</li>
+                </ul>
+            </div>
+            <!-- /Page Breadcrumb -->
+
+            <!-- Page Body -->
+            <div class="page-body">
+
+                <button type="button" tooltip="添加字段" class="btn btn-sm btn-azure btn-addon" onClick='javascript:window.location.href="{:url('ModelField/add')}"'>
+                <i class="fa fa-plus"></i> Add
+                </button>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+                            <div class="widget-body">
+                                <div class="flip-scroll">
+                                    <table class="table table-bordered table-hover">
+                                        <thead class="">
+                                        <tr pid="0">
+                                            <th class="text-center">ID</th>
+                                            <th class="text-center" width="30%">字段名称</th>
+                                            <th class="text-center">英文名称</th>
+                                            <th class="text-center">字段类型</th>
+                                            <th class="text-center">所属模型</th>
+                                            <th class="text-center">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {volist name="lst" id="vo"}
+                                        <tr >
+                                            <td class="text-center">{$vo.id}</td>
+                                            <td class="text-center">{$vo.field_cname}</td>
+                                            <td class="text-center">{$vo.field_ename}</td>
+                                            <td class="text-center">
+                                                {switch $vo.field_type}
+                                                {case 1} 单行文本{/case}
+                                                {case 2} 单选按钮{/case}
+                                                {case 3} 复选框{/case}
+                                                {case 4} 下拉菜单{/case}
+                                                {case 5} 文本域{/case}
+                                                {case 6} 附件{/case}
+                                                {case 7} 浮点类型{/case}
+                                                {case 8} 整型{/case}
+                                                {case 9} 长文本{/case}
+                                                {/switch}
+                                            </td>
+                                            <td class="text-center">
+                                                {$vo.model_name}
+                                            </td>
+                                            <td align="center">
+                                                <a href="{:url('edit',array('id' => $vo['id']))}" class="btn btn-primary btn-sm shiny">
+                                                    <i class="fa fa-edit"></i> 编辑
+                                                </a>
+                                                <a href="#" onclick="del(this)" class="btn btn-danger btn-sm shiny" id="{$vo.id}">
+                                                    <i class="fa fa-trash-o"></i> 删除
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {/volist}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pages padding-top-10 text-align-right">
+                                    {$lst -> render();}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+</div>
+
+<!--Basic Scripts-->
+<script src="__admin__/style/jquery_002.js"></script>
+<script src="__admin__/style/bootstrap.js"></script>
+<script src="__admin__/style/jquery.js"></script>
+<!--Beyond Scripts-->
+<script src="__admin__/style/beyond.js"></script>
+<script src="__admin__/plugins/layer/layer.js"></script>
+<script>
+    //ajax修改模型状态
+    function changeStatus(obj) {
+        var id = $(obj).attr('data-id');
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "{:url('Model/changeStatus')}",
+            data : {id : id},
+            success : function(res){
+                if(res.data == 1) {
+                    $(obj).attr("class","btn btn-primary btn-sm shiny");
+                    $(obj).text("启用");
+                } else {
+                    $(obj).attr("class","btn btn-danger btn-sm shiny");
+                    $(obj).text("禁用");
+                }
+            }
+        });
+    }
+    //ajax删除模型
+    function del(o) {
+        var id = $(o).attr('id');
+        layer.confirm("您确定要删除该模型吗",{icon:3,title:'message'},function (index) {
+            $.ajax({
+                type : "POST",
+                data : {id : id},
+                url : "{:url('ModelField/del')}",
+                success : function (data) {
+                    if(data.status == 1) {
+                        layer.msg(data.msg,{icon:1})
+                        window.location.href = "{:url('ModelField/lst')}";
+                    } else {
+                        layer.msg(data.msg,{icon:2})
+                    }
+                }
+            });
+            layer.close(index)
+        });
+    }
+</script>
+
+</body></html>

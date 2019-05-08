@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <title>童老师ThinkPHP交流群：484519446</title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__admin__/style/bootstrap.css" rel="stylesheet">
+    <link href="__admin__/style/font-awesome.css" rel="stylesheet">
+    <link href="__admin__/style/weather-icons.css" rel="stylesheet">
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__admin__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__admin__/style/demo.css" rel="stylesheet">
+    <link href="__admin__/style/typicons.css" rel="stylesheet">
+    <link href="__admin__/style/animate.css" rel="stylesheet">
+    <script src="__admin__/plugins/ueditor/ueditor.config.js"></script>
+    <script src="__admin__/plugins/ueditor/ueditor.all.js"></script>
+    <script src="__admin__/plugins/ueditor/lang/zh-cn/zh-cn.js" charset="gbk"></script>
+
+</head>
+<body>
+<!-- 头部 -->
+{include file="public/top"}
+<!-- /头部 -->
+
+<div class="main-container container-fluid">
+    <div class="page-container">
+        <!-- Page Sidebar -->
+        {include file="public/left"}
+        <!-- /Page Sidebar -->
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Breadcrumb -->
+            <div class="page-breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{:url('Index/index')}">系统</a>
+                    </li>
+                    <li>
+                        <a href="{:url('lst')}">文档管理</a>
+                    </li>
+                    <li class="active">修改文档</li>
+                </ul>
+            </div>
+            <!-- /Page Breadcrumb -->
+
+            <!-- Page Body -->
+            <div class="page-body">
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+                            <div class="widget-header bordered-bottom bordered-blue">
+                                <span class="widget-caption">修改文档</span>
+                            </div>
+                            <div class="widget-body">
+                                <div id="horizontal-form">
+                                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">标题</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control" placeholder="" name="title" required="" type="text" value="{$achieves.title}">
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">所属栏目</label>
+                                            <div class="col-sm-6">
+                                                {volist name="lst" id="categorys"}
+                                                {if condition="$cate_id eq $categorys['id']"}
+                                                <input type="hidden" name="cate_id" value="{$categorys.id}">
+                                                <span class="form-control">{$categorys.cate_name}</span>
+                                                {/if}
+                                                {/volist}
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">关键词</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control" placeholder="" name="keywords" required="" type="text" value="{$achieves.keywords}">
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">描述</label>
+                                            <div class="col-sm-6">
+                                                <textarea class="form-control" name="description">{$achieves.description}</textarea>
+                                            </div>
+                                        </div>
+
+                                        <!--<div class="form-group">-->
+                                            <!--<label class="col-sm-2 control-label no-padding-right">缩略图</label>-->
+                                            <!--<div class="col-sm-6">-->
+                                                <!--<input type="file" class="form-control" name="litpic">-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">缩略图</label>
+                                            <div class="col-sm-6">
+                                                <label>
+                                                    <span id="uploadify"></span>
+                                                </label>
+                                                <label>
+                                                    <div class="uploadify-button btn btn-azure" id="cancel">
+                                                        <i class="fa fa-rotate-left"></i>
+                                                        <span class="uploadify-button-text">撤销上传</span>
+                                                    </div>
+                                                </label>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group" id="contentimgdiv" {if condition="$achieves['litpic'] eq ''"}style="display: none"{/if}>
+                                            <label class="col-sm-2 control-label no-padding-right"></label>
+                                            <div class="col-sm-6">
+                                                <div id="contentimg">
+                                                    {if condition="$achieves['litpic'] neq ''"}
+                                                    <img src="__uploads__/index/content/{$achieves['litpic']}" alt="" height="100">
+                                                    {/if}
+                                                </div>
+                                                <input type="hidden" name="litpic" value="{$achieves['litpic']}">
+                                            </div>
+                                        </div>
+                                        <!--自定义字段开始-->
+                                        <?php foreach($diy_fields as $key => $value):?>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right"><?php echo $value['field_cname']?></label>
+
+                                            <div class="col-sm-6">
+                                                <?php switch ($value['field_type']) {
+                                                        case 1:
+                                                        case 7:
+                                                        case 8:
+                                                            echo "<input type='text' value='".$table_fields[$value['field_ename']]."' class='form-control' name='".$value['field_ename']."'>";
+                                                            break;
+                                                        case 5:
+                                                            echo "<textarea class='form-control' name='".$value['field_ename']."'>".$table_fields[$value['field_ename']]."</textarea>";
+                                                            break;
+                                                        case 2:
+                                                            $arr = explode(',', $value['field_values']);
+                                                            foreach ($arr as $k => $v) {
+                                                                if($table_fields[$value['field_ename']] == $v){
+                                                                    $checked = 'checked="checked"';
+                                                                } else {
+                                                                    $checked ="";
+                                                                }
+                                                                echo "<div class='radio' style='float: left;padding-left: 10px;'>";
+                                                                echo "<label>";
+                                                                echo "<input type='radio' value='$v' $checked class='colored-blue' name='".$value['field_ename']."'>";
+                                                                echo "<span class='text'>$v</span>";
+                                                                echo "</label> ";
+                                                                echo "</div>";
+                                                            }
+                                                            break;
+                                                        case 3:
+                                                                $arr = explode(',', $value['field_values']);
+                                                                foreach ($arr as $k => $v) {
+                                                                    echo "<div class='checkbox' style='float: left;padding-left: 10px;'>";
+                                                                    echo "<label style='margin-right: 10px;'>";
+                                                                    echo "<input type='checkbox' value='$v' class='colored-blue' name='".$value['field_ename']."[]'>";
+                                                                    echo "<span class='text'>$v</span>";
+                                                                    echo "</label> ";
+                                                                    echo "</div>";
+                                                                }
+                                                            break;
+                                                        case 4:
+                                                            $arr = explode(',', $value['field_values']);
+                                                            echo "<select class='form-control' name='".$value['field_ename']."'>";
+                                                            foreach ($arr as $k => $v) {
+                                                                echo "<option value='".$v."'>$v</option>";
+                                                                }
+                                                            echo "</select>";
+                                                            break;
+                                                        case 6:
+                                                            echo "<input type='file' class='form-control' name='".$value['field_ename']."'>";
+                                                            break;
+                                                        case 9:
+                                                            echo get_ueditor($value['field_ename'],$table_fields[$value['field_ename']]);
+                                                            break;
+                                                        default:
+                                                            echo "<input type='text' class='form-control' name='".$value['field_ename']."'>";
+                                                            break;
+                                                }?>
+                                            </div>
+                                        </div>
+                                        <?php endforeach;?>
+                                        <!--自定义字段结束-->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">内容</label>
+                                            <div class="col-sm-6">
+                                                <textarea id="content" name="content">{$achieves.content}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">作者</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" name="writer" value="{$achieves.writer}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">来源</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" name="source" value="{$achieves.source}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">属性</label>
+                                            <?php
+                                                $attr = $achieves['attr'];
+                                                $attr = explode(',', $attr);
+
+                                            ?>
+                                            <div class="checkbox" style="float: left;padding-left: 10px;">
+                                                <label>
+                                                    <input class="colored-blue" <?php if(in_array('头条', $attr)) { echo 'checked="checked"';}?> type="checkbox" value="头条" name="attr[]">
+                                                    <span class="text">头条</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox" style="float: left;padding-left: 10px;">
+                                                <label>
+                                                    <input class="colored-blue" <?php if(in_array('推荐', $attr)) { echo 'checked="checked"';}?> type="checkbox" value="推荐" name="attr[]">
+                                                    <span class="text">推荐</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox" style="float: left;padding-left: 10px;">
+                                                <label>
+                                                    <input class="colored-blue" <?php if(in_array('幻灯片', $attr)) { echo 'checked="checked"';}?> type="checkbox" value="幻灯片" name="attr[]">
+                                                    <span class="text">幻灯片</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox" style="float: left;padding-left: 10px;">
+                                                <label>
+                                                    <input class="colored-blue" <?php if(in_array('加粗', $attr)) { echo 'checked="checked"';}?> type="checkbox" value="加粗" name="attr[]">
+                                                    <span class="text">加粗</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox" style="float: left;padding-left: 10px;">
+                                                <label>
+                                                    <input class="colored-blue" <?php if(in_array('图片', $attr)) { echo 'checked="checked"';}?>  type="checkbox" value="图片" name="attr[]">
+                                                    <span class="text">图片</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right">点击量</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" name="click" value="{$achieves.click}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <button type="submit" class="btn btn-default">保存信息</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+</div>
+
+<!--Basic Scripts-->
+<script src="__admin__/style/jquery_002.js"></script>
+<script src="__admin__/style/bootstrap.js"></script>
+<script src="__admin__/style/jquery.js"></script>
+<!--Beyond Scripts-->
+<script src="__admin__/style/beyond.js"></script>
+<script src="__admin__/plugins/uploadify/jquery.uploadify.min.js"></script>
+<script src="__admin__/plugins/layer/layer.js"></script>
+
+<script type="text/javascript">
+    //uploadify上传
+    $(function () {
+        $("#uploadify").uploadify({
+            //指定swf文件
+            'swf': '__admin__/plugins/uploadify/uploadify.swf',
+            //后台处理的页面
+            'uploader': "{:url('Content/upload')}",
+            'progressData' : 'speed',
+            //按钮显示的文字
+            'buttonText': '上传文件',
+            'buttonClass' : 'btn btn-azure',
+            'fileObjName' : 'img',
+            'fileTypeDesc': 'Image Files',
+            'onUploadSuccess' : function (file,data,response) {
+                var contentimg = "__uploads__/index/content/" + data;
+                var contentHtml = "<img src='"+contentimg+"' height='100'>";
+                $("#contentimgdiv").show();
+                $("#contentimg").html(contentHtml);
+                $("input[name='litpic']").val(data);
+            }
+        });
+        //删除uploadify原有样式
+        $("#uploadify-button").removeAttr('style');
+        $("#uploadify-button").prepend("<i class='fa fa-upload'></i>");
+    });
+    $("#cancel").click(function () {
+        var imgurl = $("input[name='litpic']").val();
+        if(!imgurl) {
+            layer.alert("请先上传图片",{icon:2});
+            return false;
+        } else {
+            layer.confirm("您确定要撤销图片吗",{icon:3,title:'message'},function (index) {
+                $("#contentimgdiv").hide();
+                $("input[name='litpic']").val('');
+                $.ajax({
+                    type : "POST",
+                    data : {imgurl : imgurl},
+                    url : "{:url('Content/unlinkFile')}",
+                    success : function (data) {
+                        if(data.status == 1) {
+                            layer.msg(data.msg,{icon:1})
+                        } else {
+                            layer.msg(data.msg,{icon:2})
+                        }
+
+                    }
+                });
+                layer.close(index)
+            });
+        }
+    });
+    //百度编辑器
+    var options = {
+        toolbars : [
+            ['fullscreen', 'source', '|', 'undo', 'redo', '|',
+                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                'directionalityltr', 'directionalityrtl', 'indent', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+                'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+                'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment', 'map', 'gmap', 'insertframe', 'insertcode', 'webapp', 'pagebreak', 'template', 'background', '|',
+                'horizontal', 'date', 'time', 'spechars', 'snapscreen', 'wordimage', '|',
+                'inserttable'],
+        ],
+        initialFrameWidth :'100%',
+        initialFrameHeight : 400
+    }
+
+    UE.getEditor('content',options)
+
+    //获取多个百度编辑器
+    // <?php foreach($longtext_fields as $key => $value): ?>
+    // UE.getEditor('<?php echo $value['field_ename']; ?>',options);
+    // <?php endforeach; ?>
+</script>
+
+</body></html>
