@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:70:"D:\Ian\wamp\www\cms\public/../application/admin\view\content\edit.html";i:1557274814;s:58:"D:\Ian\wamp\www\cms\application\admin\view\public\top.html";i:1535515250;s:59:"D:\Ian\wamp\www\cms\application\admin\view\public\left.html";i:1556496660;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:70:"D:\Ian\wamp\www\cms\public/../application/admin\view\content\edit.html";i:1557360290;s:58:"D:\Ian\wamp\www\cms\application\admin\view\public\top.html";i:1535515250;s:59:"D:\Ian\wamp\www\cms\application\admin\view\public\left.html";i:1556496660;}*/ ?>
 <!DOCTYPE html>
 <html><head>
     <meta charset="utf-8">
@@ -290,6 +290,7 @@
                             <div class="widget-body">
                                 <div id="horizontal-form">
                                     <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="id" value="<?php echo $achieves['id']; ?>">
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label no-padding-right">标题</label>
                                             <div class="col-sm-6">
@@ -388,10 +389,16 @@
                                                             break;
                                                         case 3:
                                                                 $arr = explode(',', $value['field_values']);
+                                                                $section = explode(',', $table_fields[$value['field_ename']]);
                                                                 foreach ($arr as $k => $v) {
+                                                                    if(in_array($v, $section)){
+                                                                        $checked = 'checked="checked"';
+                                                                    } else {
+                                                                        $checked ="";
+                                                                    }
                                                                     echo "<div class='checkbox' style='float: left;padding-left: 10px;'>";
                                                                     echo "<label style='margin-right: 10px;'>";
-                                                                    echo "<input type='checkbox' value='$v' class='colored-blue' name='".$value['field_ename']."[]'>";
+                                                                    echo "<input type='checkbox' $checked value='$v' class='colored-blue' name='".$value['field_ename']."[]'>";
                                                                     echo "<span class='text'>$v</span>";
                                                                     echo "</label> ";
                                                                     echo "</div>";
@@ -401,12 +408,20 @@
                                                             $arr = explode(',', $value['field_values']);
                                                             echo "<select class='form-control' name='".$value['field_ename']."'>";
                                                             foreach ($arr as $k => $v) {
-                                                                echo "<option value='".$v."'>$v</option>";
+                                                                if($table_fields[$value['field_ename']] == $v){
+                                                                    $checked = 'selected="selected"';
+                                                                } else {
+                                                                    $checked ="";
+                                                                }
+                                                                echo "<option $checked value='".$v."'>$v</option>";
                                                                 }
                                                             echo "</select>";
                                                             break;
                                                         case 6:
                                                             echo "<input type='file' class='form-control' name='".$value['field_ename']."'>";
+                                                            if($table_fields[$value['field_ename']]) {
+                                                                echo "<img src='/cms/public/uploads/index/content/att/".$table_fields[$value['field_ename']]."' height='100'>";
+                                                            }
                                                             break;
                                                         case 9:
                                                             echo get_ueditor($value['field_ename'],$table_fields[$value['field_ename']]);

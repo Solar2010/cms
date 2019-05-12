@@ -55,7 +55,7 @@ class Content extends Base
         if($info) {
             return $info -> getSaveName();
         } else {
-            echo $file -> getError();exit;
+            return $file -> getError();exit;
         }
     }
 
@@ -100,7 +100,9 @@ class Content extends Base
             $addtable['aid'] = $addAchieves;
             if($_FILES) {
                 foreach ($_FILES as $key => $value) {
-                    $addtable[$key] = $this -> uploads($key);
+                    if($value['name'] != '') {
+                        $addtable[$key] = $this -> uploads($key);
+                    }
                 }
             }
             //获取附表名称
@@ -143,8 +145,6 @@ class Content extends Base
         $modeIds = db('model') -> field('table_name') -> find($mode_id);
         $tableName = $modeIds['table_name'];
         $table_fields = db($tableName) -> where(['aid' => $id]) -> find();
-        //dump($table_fields);die;
-
 
         $lst = model('category') -> catetree();
         //获取自定义字段
@@ -155,6 +155,47 @@ class Content extends Base
         $longtextFields = db('model_field')
             -> where(['mode_id' => $mode_id, 'field_type' => 9])
             -> select();
+
+
+        if(request() -> isPost()) {
+            $data = input('post.');
+            $sql = sprintf("SHOW COLUMNS FROM `tp_achieves`");
+            $columns = array();
+            $_columns = Db::query($sql);
+            foreach ($_columns as $item) {
+                $columns[] = $item['Field'];
+            }
+            $achieves = array();
+            $addtable = array();
+
+            foreach ($data as $key => $value) {
+                if(is_array($value)) {
+                    $value = implode(',', $value);
+                }
+                if(in_array($key, $columns)) {
+                    $achieves[$key] = $value;
+                } else {
+                    $addtable[$key] = $value;
+                }
+            }
+            $achieves['id'] = $data['id'];
+
+            if($_FILES) {
+                foreach ($_FILES as $key => $value) {
+                    if($value['name'] != '') {
+                        $addtable[$key] = $this -> uploads($key);
+                    }
+                }
+            }
+            $editAchieves = db('achieves') -> update($achieves);
+            $editAddTable = db($tableName) -> where(['aid' => $data['id']]) -> update($addtable);
+
+            if($editAchieves !== false && $editAddTable !== false) {
+                return $this -> success('修改成功');
+            } else {
+                return $this -> error('修改失败');
+            }
+        }
         $this -> assign([
             'lst' => $lst,
             'mode_id' => $mode_id,
