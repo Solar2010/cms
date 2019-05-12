@@ -1,18 +1,17 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:70:"D:\Ian\wamp\www\cms\public/../application/admin\view\category\lst.html";i:1556581076;s:58:"D:\Ian\wamp\www\cms\application\admin\view\public\top.html";i:1535515250;s:59:"D:\Ian\wamp\www\cms\application\admin\view\public\left.html";i:1556496660;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:70:"D:\Ian\wamp\www\cms\public/../application/admin\view\category\lst.html";i:1557669382;s:59:"D:\Ian\wamp\www\cms\application\admin\view\public\meta.html";i:1557669382;s:58:"D:\Ian\wamp\www\cms\application\admin\view\public\top.html";i:1535515250;s:59:"D:\Ian\wamp\www\cms\application\admin\view\public\left.html";i:1556496660;}*/ ?>
 <!DOCTYPE html>
 <html><head>
     <meta charset="utf-8">
-    <title>童老师ThinkPHP交流群：484519446</title>
+    <title>FLY-CMS</title>
 
     <meta name="description" content="Dashboard">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!--Basic Styles-->
-    <link href="/cms/public/static/admin/style/bootstrap.css" rel="stylesheet">
-    <link href="/cms/public/static/admin/style/font-awesome.css" rel="stylesheet">
-    <link href="/cms/public/static/admin/style/weather-icons.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="/cms/public/static/admin/style/bootstrap.css">
+    <link rel="stylesheet" href="/cms/public/static/admin/style/font-awesome.css">
+    <link rel="stylesheet" href="/cms/public/static/admin/style/weather-icons.css">
     <!--Beyond styles-->
     <link id="beyond-link" href="/cms/public/static/admin/style/beyond.css" rel="stylesheet" type="text/css">
     <link href="/cms/public/static/admin/style/demo.css" rel="stylesheet">
