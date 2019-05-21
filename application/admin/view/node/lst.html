@@ -1,0 +1,152 @@
+{include file="public/meta"}
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__admin__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__admin__/style/demo.css" rel="stylesheet">
+    <link href="__admin__/style/typicons.css" rel="stylesheet">
+    <link href="__admin__/style/animate.css" rel="stylesheet">
+</head>
+<body>
+<!-- 头部 -->
+{include file="public/top"}
+<!-- /头部 -->
+
+<div class="main-container container-fluid">
+    <div class="page-container">
+        <!-- Page Sidebar -->
+        {include file="public/left"}
+        <!-- /Page Sidebar -->
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Breadcrumb -->
+            <div class="page-breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{:url('Index/lst')}">系统</a>
+                    </li>
+                    <li class="active">采集管理</li>
+                </ul>
+            </div>
+            <!-- /Page Breadcrumb -->
+
+            <!-- Page Body -->
+            <div class="page-body">
+
+                <button type="button" tooltip="添加采集节点" class="btn btn-sm btn-azure btn-addon" onClick='javascript:window.location.href="{:url('Node/addListRules')}"'>
+                <i class="fa fa-plus"></i> Add
+                </button>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+                            <div class="widget-body">
+                                <div class="flip-scroll">
+                                    <table class="table table-bordered table-hover">
+                                        <thead class="">
+                                        <tr pid="0">
+                                            <th class="text-center">ID</th>
+                                            <th class="text-center" width="20%">节点名称</th>
+                                            <th class="text-center">所属模型</th>
+                                            <th class="text-center">输出编码</th>
+                                            <th class="text-center">输入编码</th>
+                                            <th class="text-center">添加时间</th>
+                                            <th class="text-center">最后采集时间</th>
+                                            <th class="text-center" width="18%">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {volist name="lst" id="vo"}
+                                        <tr >
+                                            <td class="text-center">{$vo.id}</td>
+                                            <td class="text-center">{$vo.node_name}</td>
+                                            <td class="text-center">{$vo.model_name}</td>
+                                            <td class="text-center">{$vo.output_encoding}</td>
+                                            <td class="text-center">{$vo.input_encoding}</td>
+                                            <td class="text-center">{$vo.addtime | date="Y-m-d H:i:s", ###}</td>
+                                            <td class="text-center">
+                                                {if condition="$vo['lasttime'] eq 0"}
+                                                还未采集
+                                                {else /}
+                                                {$vo.lasttime | date="Y-m-d H:i:s", ###}
+                                                {/if}
+                                            </td>
+                                            <td align="center">
+                                                <a href="{:url('edit',array('id' => $vo['id']))}" class="btn btn-primary btn-sm shiny">
+                                                    <i class="fa fa-edit"></i> 编辑
+                                                </a>
+                                                <a href="#" onclick="del(this)" class="btn btn-danger btn-sm shiny" id="{$vo.id}">
+                                                    <i class="fa fa-trash-o"></i> 删除
+                                                </a>
+                                                <a href="{:url('doQuery',array('id' => $vo['id']))}" class="btn btn-primary btn-sm shiny">
+                                                    <i class="fa fa-bug"></i> 采集
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {/volist}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pages padding-top-10 text-align-right">
+                                    {$lst -> render();}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+</div>
+
+<!--Basic Scripts-->
+<script src="__admin__/style/jquery_002.js"></script>
+<script src="__admin__/style/bootstrap.js"></script>
+<script src="__admin__/style/jquery.js"></script>
+<!--Beyond Scripts-->
+<script src="__admin__/style/beyond.js"></script>
+<script src="__admin__/plugins/layer/layer.js"></script>
+<script>
+    //ajax修改模型状态
+    function changeStatus(obj) {
+        var id = $(obj).attr('data-id');
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "{:url('Model/changeStatus')}",
+            data : {id : id},
+            success : function(res){
+                if(res.data == 1) {
+                    $(obj).attr("class","btn btn-primary btn-sm shiny");
+                    $(obj).text("启用");
+                } else {
+                    $(obj).attr("class","btn btn-danger btn-sm shiny");
+                    $(obj).text("禁用");
+                }
+            }
+        });
+    }
+    //ajax删除模型
+    function del(o) {
+        var id = $(o).attr('id');
+        var table = $(o).attr('table');
+        layer.confirm("您确定要删除该模型吗",{icon:3,title:'message'},function (index) {
+            $.ajax({
+                type : "POST",
+                data : {id : id,table_name:table},
+                url : "{:url('Model/del')}",
+                success : function (data) {
+                    if(data.status == 1) {
+                        layer.msg(data.msg,{icon:1})
+                        window.location.href = "{:url('Model/lst')}";
+                    } else {
+                        layer.msg(data.msg,{icon:2})
+                    }
+                }
+            });
+            layer.close(index)
+        });
+    }
+</script>
+
+</body></html>

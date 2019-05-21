@@ -179,7 +179,10 @@
                                                         case 6:
                                                             echo "<input type='file' class='form-control' name='".$value['field_ename']."'>";
                                                             if($table_fields[$value['field_ename']]) {
-                                                                echo "<img src='__uploads__/index/content/att/".$table_fields[$value['field_ename']]."' height='100'>";
+                                                                echo "<img src='__uploads__/index/content/att/".$table_fields[$value['field_ename']]."' height='100'>
+
+                                                                        <a href='javascript:;' onclick='delimg(this)'>删除</a>
+                                                ";
                                                             }
                                                             break;
                                                         case 9:
@@ -284,6 +287,32 @@
 <script src="__admin__/plugins/layer/layer.js"></script>
 
 <script type="text/javascript">
+    function delimg(o) {
+        layer.confirm("您确定要撤销图片吗",{icon:3,title:'message'},function (index) {
+            var img = $(o).prev();
+            var input = img.prev();
+            var field_name = input.attr("name");
+            var aid = "{$id}";
+            var mode_id = "{$mode_id}";
+            img.remove();
+            $(o).remove();
+            $.ajax({
+                type : "POST",
+                data : {field_name : field_name, mode_id : mode_id, aid : aid},
+                url : "{:url('Content/ajaxDelImg')}",
+                success : function (data) {
+                    if(data.status == 1) {
+                        layer.msg(data.msg,{icon:1})
+                    } else {
+                        layer.msg(data.msg,{icon:2})
+                    }
+
+                }
+            });
+            layer.close(index)
+        });
+
+    }
     //uploadify上传
     $(function () {
         $("#uploadify").uploadify({
@@ -357,6 +386,7 @@
     // <?php foreach($longtext_fields as $key => $value): ?>
     // UE.getEditor('<?php echo $value['field_ename']; ?>',options);
     // <?php endforeach; ?>
+
 </script>
 
 </body></html>

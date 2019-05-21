@@ -137,6 +137,29 @@
             </li>
         </ul>
         </li>
+        <li  {if condition="$controller eq 'Node'"} class="open" {/if}>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-bug"></i>
+
+                <span class="menu-text">采集管理</span>
+
+                <i class="menu-expand"></i>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="{:url('Node/lst')}">
+                        <span class="menu-text">采集列表</span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{:url('Node/addListRules')}">
+                        <span class="menu-text">添加采集节点</span>
+                        <i class="menu-expand"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
         <li>
             <a href="#" class="menu-dropdown">
                 <i class="menu-icon fa fa-gear"></i>

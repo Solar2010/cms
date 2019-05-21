@@ -1,0 +1,178 @@
+{include file="public/meta"}
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__admin__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__admin__/style/demo.css" rel="stylesheet">
+    <link href="__admin__/style/typicons.css" rel="stylesheet">
+    <link href="__admin__/style/animate.css" rel="stylesheet">
+    <!--uploadify styles-->
+
+</head>
+<body>
+<!-- 头部 -->
+{include file="public/top"}
+<!-- /头部 -->
+
+<div class="main-container container-fluid">
+    <div class="page-container">
+        <!-- Page Sidebar -->
+        {include file="public/left"}
+        <!-- /Page Sidebar -->
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Breadcrumb -->
+            <div class="page-breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{:url('Index/lst')}">系统</a>
+                    </li>
+                    <li>
+                        <a href="{:url('Model/lst')}">采集管理</a>
+                    </li>
+                    <li class="active">添加采集节点</li>
+                </ul>
+            </div>
+            <!-- /Page Breadcrumb -->
+
+            <!-- Page Body -->
+            <div class="page-body">
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+
+                            <div class="widget-body">
+                                <div id="horizontal-form">
+                                    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+                                        <div class="tabbable">
+                                            <ul class="nav nav-tabs  tabs-flat">
+                                                <li class="active ">
+                                                    <a data-toggle="tab" href="#FlatTab-1">添加采集节点-列表采集节点</a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content  tabs-flat">
+                                                <div class="active tab-pane" id="FlatTab-1">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">节点名称</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" name="node_name">
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 必填</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">所属模型</label>
+                                                        <div class="col-sm-6">
+                                                            <select name="mode_id" class="form-control">
+                                                                {volist name="modes" id="vo"}
+                                                                <option value="{$vo.id}">{$vo.model_name}</option>
+                                                                {/volist}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">输出编码</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="radio" style="float: left">
+                                                                <label><input checked="checked" name="output_encoding" type="radio" value="UTF-8">
+                                                                    <span class="text">UTF-8</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="radio" style="float: left;padding-left: 10px">
+                                                                <label><input name="output_encoding" type="radio" value="GB2312">
+                                                                    <span class="text">GB2312</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 必填</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">输入编码</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="radio" style="float: left">
+                                                                <label><input checked="checked" name="input_encoding" type="radio" value="UTF-8">
+                                                                    <span class="text">UTF-8</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="radio" style="float: left;padding-left: 10px">
+                                                                <label><input name="input_encoding" type="radio" value="GB2312">
+                                                                    <span class="text">GB2312</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 必填</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">列表页URL</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" name="list_url">
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 动态页码采用（*）进行代替</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">页码配置</label>
+                                                        <div class="col-sm-6">
+                                                            <span class="control-label" style="float: left;padding-left: 10px;padding-right: 10px;">从</span>
+                                                            <input type="text" class="form-control" name="start_page" style="width: 50px;text-align: center;float: left" value="1">
+                                                            <span class="control-label" style="float: left;padding-left: 10px;padding-right: 10px;">到</span>
+                                                            <input type="text"  class="form-control" name="end_page" style="width: 50px;text-align: center;float: left">
+                                                            <span class="control-label" style="float: left;padding-left: 10px;padding-right: 10px;">每次递增</span>
+                                                            <input type="text" class="form-control" name="step" style="width: 50px;text-align: center;float: left">
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 必填</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">采集范围</label>
+                                                        <div class="col-sm-6">
+                                                            <textarea name="range" class="form-control"></textarea>
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 必填</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">URL采集规则</label>
+                                                        <div class="col-sm-6">
+                                                            <textarea name="url" class="form-control"></textarea>
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 必填</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">缩略图采集规则</label>
+                                                        <div class="col-sm-6">
+                                                            <textarea name="litpic" class="form-control"></textarea>
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 必填</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <button type="submit" class="btn btn-default">保存信息并进入下一步设置</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+</div>
+
+<!--Basic Scripts-->
+<script src="__admin__/style/jquery_002.js"></script>
+<script src="__admin__/style/bootstrap.js"></script>
+<script src="__admin__/style/jquery.js"></script>
+<!--Beyond Scripts-->
+<script src="__admin__/style/beyond.js"></script>
+
+<script src="__admin__/plugins/layer/layer.js"></script>
+
+
+
+
+
+</body></html>

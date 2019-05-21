@@ -203,7 +203,8 @@ class Content extends Base
             'diy_fields' => $diyFields,
             'longtext_fields' => $longtextFields,
             'achieves' => $achieves,
-            'table_fields' => $table_fields
+            'table_fields' => $table_fields,
+            'id' => $id
         ]);
         return view();
     }
@@ -319,6 +320,36 @@ class Content extends Base
                     -> where('id',$id)
                     -> setField('img','');
             }
+            return json([
+                'msg' => '文件删除成功',
+                'code' => 200,
+                'status' => 1
+            ]);
+        } else {
+            return json([
+                'msg' => '文件删除失败',
+                'code' => 500,
+                'status' =>  2
+            ]);
+        }
+    }
+
+    public function ajaxDelImg()
+    {
+        $aid = input('aid');
+        $mode_id = input('mode_id');
+        $field_name = input('field_name');
+        $models = db("model") -> find($mode_id);
+        $tableName = $models['table_name'];
+        $imgsrc = db($tableName)
+            -> where(array('aid' => $aid))
+            -> find();
+        $imgpath = $imgsrc[$field_name];
+        $save = db($tableName)
+            -> where(array('aid' => $aid))
+            -> setField($field_name,'');
+        if($save !== false) {
+            @unlink(UPLOAD_IMG.'index/content/att/'.$imgpath);
             return json([
                 'msg' => '文件删除成功',
                 'code' => 200,

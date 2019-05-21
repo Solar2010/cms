@@ -1,0 +1,157 @@
+{include file="public/meta"}
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__admin__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__admin__/style/demo.css" rel="stylesheet">
+    <link href="__admin__/style/typicons.css" rel="stylesheet">
+    <link href="__admin__/style/animate.css" rel="stylesheet">
+    <!--uploadify styles-->
+    <style>
+        .form-controller {
+            width: 200px;
+            float:left;
+            margin-right: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<!-- 头部 -->
+{include file="public/top"}
+<!-- /头部 -->
+
+<div class="main-container container-fluid">
+    <div class="page-container">
+        <!-- Page Sidebar -->
+        {include file="public/left"}
+        <!-- /Page Sidebar -->
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Breadcrumb -->
+            <div class="page-breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{:url('Index/lst')}">系统</a>
+                    </li>
+                    <li>
+                        <a href="{:url('Model/lst')}">采集管理</a>
+                    </li>
+                    <li class="active">添加采集节点</li>
+                </ul>
+            </div>
+            <!-- /Page Breadcrumb -->
+
+            <!-- Page Body -->
+            <div class="page-body">
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+
+                            <div class="widget-body">
+                                <div id="horizontal-form">
+                                    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+                                        <div class="tabbable">
+                                            <ul class="nav nav-tabs  tabs-flat">
+                                                <li class="active ">
+                                                    <a data-toggle="tab" href="#FlatTab-1">添加采集节点-内容采集节点</a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content  tabs-flat">
+                                                <div class="active tab-pane" id="FlatTab-1">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">标题</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control form-controller" name="title[rule]" placeholder="采集规则" required="required">
+                                                            <input type="text" class="form-control form-controller" name="title[attr]" placeholder="采集属性" required="required">
+                                                            <input type="text" class="form-control form-controller" name="title[filter]" placeholder="过滤规则" required="required">
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 必填</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">关键词</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control form-controller" name="keywords[rule]" placeholder="采集规则">
+                                                            <input type="text" class="form-control form-controller" name="keywords[attr]" placeholder="采集属性">
+                                                            <input type="text" class="form-control form-controller" name="keywords[filter]" placeholder="过滤规则">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">描述</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control form-controller" name="description[rule]" placeholder="采集规则">
+                                                            <input type="text" class="form-control form-controller" name="description[attr]" placeholder="采集属性">
+                                                            <input type="text" class="form-control form-controller" name="description[filter]" placeholder="过滤规则">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">作者</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control form-controller" name="writer[rule]" placeholder="采集规则">
+                                                            <input type="text" class="form-control form-controller" name="writer[attr]" placeholder="采集属性">
+                                                            <input type="text" class="form-control form-controller" name="writer[filter]" placeholder="过滤规则">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">来源</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control form-controller" name="source[rule]" placeholder="采集规则">
+                                                            <input type="text" class="form-control form-controller" name="source[attr]" placeholder="采集属性">
+                                                            <input type="text" class="form-control form-controller" name="source[filter]" placeholder="过滤规则">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">内容</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control form-controller" name="content[rule]" placeholder="采集规则">
+                                                            <input type="text" class="form-control form-controller" name="content[attr]" placeholder="采集属性">
+                                                            <input type="text" class="form-control form-controller" name="content[filter]" placeholder="过滤规则">
+                                                        </div>
+                                                    </div>
+                                                    {if condition="$modes"}
+                                                    {volist name="modes" id="vo"}
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label no-padding-right">{$vo.field_cname}</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control form-controller" name="{$vo.field_ename}[rule]" placeholder="采集规则">
+                                                            <input type="text" class="form-control form-controller" name="{$vo.field_ename}[attr]" placeholder="采集属性">
+                                                            <input type="text" class="form-control form-controller" name="{$vo.field_ename}[filter]" placeholder="过滤规则">
+                                                        </div>
+                                                    </div>
+                                                    {/volist}
+                                                    {/if}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <button type="submit" class="btn btn-default">保存</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+</div>
+
+<!--Basic Scripts-->
+<script src="__admin__/style/jquery_002.js"></script>
+<script src="__admin__/style/bootstrap.js"></script>
+<script src="__admin__/style/jquery.js"></script>
+<!--Beyond Scripts-->
+<script src="__admin__/style/beyond.js"></script>
+
+<script src="__admin__/plugins/layer/layer.js"></script>
+
+
+
+
+
+</body></html>
