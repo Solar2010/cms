@@ -90,5 +90,15 @@ CREATE TABLE `tp_node`  (
   `content_rules` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '内容采集规则',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
+DROP TABLE IF EXISTS `tp_html`;
+CREATE TABLE `tp_html`  (
+  `id` int(11) NOT NULL COMMENT 'id',
+  `node_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '节点ID',
+  `title` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '采集标题',
+  `url` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '采集地址',
+  `addtime` int(10) NOT NULL DEFAULT 0 COMMENT '采集时间',
+  `is_export` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否导出0：未导出 1：已导出',
+  `result` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '采集结果集',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 ";

@@ -141,13 +141,13 @@ class Node extends Base
 
 
         $list_rules = json_decode($nodes['list_rules'], true);
-
         $list_url = $list_rules['list_url'];
         $start_page = $list_rules['start_page'];
         $end_page = $list_rules['end_page'];
         $step = $list_rules['step'];
         $range = $list_rules['range'];
         $list_query_rules = $list_rules['list_rules'];
+
         $list_query_rules = [
             'url' => [$list_query_rules['url'], 'href'],
             'litpic' => [$list_query_rules['litpic'], 'src']
@@ -157,14 +157,18 @@ class Node extends Base
         //处理采集列表网址
         $_list_url = array();
         for($i = $start_page; $i <= $end_page; $i = $i + $step) {
-            $_list_url = str_replace('(*)', $i, $list_url);
+            $_list_url[] = str_replace('(*)', $i, $list_url);
         }
-
+        //print_r($list_query_rules);die;
         //循环采集列表数据
         $_data = array();
         foreach ($_list_url as $key => $value) {
+//            print_r($list_query_rules);
+//            print_r($value);die;
             $_data[] = QueryList::Query($value, $list_query_rules, $range, $output_encoding, $input_encoding) -> data;
+            //print_r($_data);die;
         }
+
         //数组重构,列表数据结果集
         $data = [];
         foreach ($_data as $key => $value) {
@@ -177,6 +181,7 @@ class Node extends Base
         $_dataContent = array();
         foreach ($data as $key => $value) {
             $_dataContent[] = QueryList::Query($value['url'], $content_query_rules, '', $output_encoding, $input_encoding) -> data;
+            $_dataContent[$key][0]['url'] = $value['url'];//手动添加URL写入临时表
         }
         //数组重构
         $dataContent = array();
@@ -185,6 +190,16 @@ class Node extends Base
                 $dataContent[] = $v;
             }
         }
+        //将数据写入临时表
+        foreach ($dataContent as $key => $value) {
+            $insertData['node_id'] = $id;
+            $insertData['title'] = $value['title'];
+            $insertData['url'] = $value['url'];
+            $insertData['addtime'] = time();
+            $insertData['result'] = json_encode($value);
+            db('html') -> insert($insertData);
+        }
+        dump($dataContent);die;
 
     }
 }
