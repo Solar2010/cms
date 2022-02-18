@@ -1,0 +1,76 @@
+<template>
+  <div>
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>管理员管理</el-breadcrumb-item>
+      <el-breadcrumb-item>权限列表</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-card>
+      <el-collapse class="m-b-20" v-model="active_name">
+        <el-collapse-item name="1">
+          <template v-for="item in data">
+                    {{ item.name }}
+                    
+                    <template v-if="item.children">
+                      <template v-for="items in item.children">
+                        <el-checkbox
+                          class="last-child"
+                          :label="items.id"
+                          :key="items.id"
+                          @change="isSelected(items, item)"
+                          >{{ items.name }}</el-checkbox
+                        >
+                      </template>
+                    </template>
+          </template>
+        </el-collapse-item>
+      </el-collapse>
+    </el-card>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      data: [],
+      active_name: ["1"]
+    };
+  },
+  methods: {
+    async getMenuList() {
+      const result = await this.$http.get("/admin/permission/list");
+      if (result.status !== 200) {
+        return this.$message.error("获取菜单数据失败");
+      }
+      this.data = result.data.tree;
+      console.log( this.data)
+      //处理数据
+      this.data.forEach((item) => {
+        item.label = item.name;
+        if (item.children.length !== 0) {
+          item.children.forEach((i) => {
+            i.label = i.name;
+          });
+        }
+      });
+    }
+  },
+  created() {
+    this.getMenuList();
+  },
+};
+</script>
+<style lang="less" scoped>
+.parent-power {
+    margin-top: 20px;
+    background: rgba(232, 232, 232, 0.88);
+    width: calc(100% - 40px);
+    padding: 15px 20px;
+  }
+
+   .last-child {
+    margin-left: 50px !important;
+    margin-top: 20px;
+  }
+</style>

@@ -1,0 +1,107 @@
+<template>
+  <el-container class="home-container">
+    <el-header>
+      <div>
+        <img src="../assets/logo.jpg" alt="管理后台" width="100%" />
+        <span>后台系统</span>
+      </div>
+      <el-button type="info" @click="loginOut">退出</el-button>
+    </el-header>
+    <el-container>
+      <el-aside>
+        <div class="toggle-button" @click="toggle">|||</div>
+        <el-menu
+          default-active="2"
+          class="el-menu-vertical-demo"
+          background-color="#545c64"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+        >
+          <el-submenu v-for="item in menuList" :key="item.id" :index="item.id + ''">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>{{item.name}}</span>
+            </template>
+            <el-menu-item-group v-for="ite in item.children" :key="ite.id" :index="ite.id + ''">
+              <template slot="title">{{ite.name}}</template>
+              <el-menu-item v-for="it in ite.children" :key="it.id" :index="it.id + ''">{{it.name}}</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+        </el-menu>
+      </el-aside>
+    </el-container>
+  </el-container>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+        menuList: {}
+    };
+  },
+  created() {
+    this.getMenuList();
+  },
+  methods: {
+    async getMenuList() {
+      const result = await this.$http.get("/admin/permission/list");
+      if(result.status !== 200) {
+          return this.$message.error('获取菜单数据失败')
+      }
+      this.menuList = result.data.tree
+    },
+    loginOut() {},
+    toggle() {},
+  },
+};
+</script>
+
+<style lang="less" scoped>
+.home-container {
+  height: 100%;
+}
+.el-header {
+  background-color: #373d41;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 0;
+  align-items: center;
+  color: #fff;
+  font-size: 20px;
+  > div {
+    display: flex;
+    align-items: center;
+    img {
+      max-height: 50px;
+      max-width: 50px;
+      border-radius: 5px;
+      opacity: 0.2;
+    }
+    span {
+      margin-left: 10px;
+    }
+  }
+}
+.el-aside {
+  background-color: #333744;
+  .el-menu {
+    border-right: none;
+  }
+}
+.el-main {
+  background-color: #eaedf1;
+}
+.iconfont {
+  margin-right: 10px;
+}
+.toggle-button {
+  background-color: #4a5064;
+  font-size: 10px;
+  line-height: 24px;
+  text-align: center;
+  color: #fff;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+}
+</style>
