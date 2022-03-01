@@ -87,6 +87,7 @@
                 icon="el-icon-edit"
                 circle
                 size="mini"
+                @click="editDialog(scope.row)"
               ></el-button>
             </el-tooltip>
             <el-tooltip
@@ -100,6 +101,7 @@
                 icon="el-icon-delete"
                 circle
                 size="mini"
+                @click="delAdmin(scope.row)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -121,37 +123,23 @@
       width="50%"
       :before-close="handleClose"
     >
-      <el-form
-        ref="Form"
-        label-width="0"
-        :model="form"
-        :rules="formRules"
-      >
-        <el-form-item prop="account">
-          <el-input
-            v-model="form.account"
-            prefix-icon="el-icon-s-custom"
-            auto-complete="off"
-          />
+      <el-form ref="Form" :model="form" :rules="formRules" label-width="160px">
+        <el-form-item label="管理员姓名">
+          <el-input v-model="form.username"></el-input>
         </el-form-item>
-        <el-form-item prop="password">
-          <el-input
-            v-model="form.password"
-            prefix-icon="el-icon-lock"
-            type="password"
-            auto-complete="new-password"
-          />
+        <el-form-item label="管理员账户">
+          <el-input v-model="form.account" :disabled="disInput"></el-input>
         </el-form-item>
-        <el-form-item class="btns">
-          <el-button type="primary" @click="login">登录</el-button>
-          <el-button type="info" @click="resetLoginForm">重置</el-button>
+        <el-form-item label="管理有邮箱">
+          <el-input v-model="form.email"></el-input>
+        </el-form-item>
+        <el-form-item label="管理员手机号">
+          <el-input v-model="form.mobile"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="saveAdmin()">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -169,8 +157,15 @@ export default {
       total: 0,
       dialogVisible: false,
       title: "",
-      form: {},
-      formRules: []
+      form: {
+        username: "",
+        account: "",
+        email: "",
+        mobile: "",
+        id: 0,
+      },
+      formRules: {},
+      disInput: false,
     };
   },
   methods: {
@@ -205,6 +200,74 @@ export default {
     addAdmin() {
       this.dialogVisible = true;
       this.title = "添加管理员";
+    },
+    handleClose() {
+      (this.form = {
+        username: "",
+        account: "",
+        email: "",
+        mobile: "",
+        id: 0,
+      }),
+        (this.dialogVisible = false);
+      this.title = "";
+      this.disInput = false;
+    },
+    async saveAdmin() {
+      if (this.form.id == 0) {
+        const result = await this.$http.post("/admin/add", this.form);
+        this.handleClose();
+        if (result.status != 200) {
+          return this.$message.error("添加管理员失败");
+        }
+        this.getAdminList();
+        return this.$message.success("添加管理员成功");
+      } else {
+        const result = await this.$http.post("/admin/edit", this.form);
+        this.handleClose();
+        if (result.status != 200) {
+          return this.$message.error("编辑管理员失败");
+        }
+        this.getAdminList();
+        return this.$message.success("编辑管理员成功");
+      }
+    },
+    editDialog(admin) {
+      this.dialogVisible = true;
+      this.title = "编辑管理员";
+      this.form.username = admin.username;
+      this.form.account = admin.account;
+      this.form.email = admin.email;
+      this.form.mobile = admin.mobile;
+      this.disInput = true;
+      this.form.id = admin.id;
+    },
+    delAdmin(admin) {
+      this.$confirm("确认删除管理员？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          const result = await this.$http.get("/admin/delete/" + admin.id);
+          if (result.status != 200) {
+            return this.$message({
+              type: "error",
+              message: "删除失败!",
+            });
+          }
+          this.getAdminList();
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
   },
   created() {
